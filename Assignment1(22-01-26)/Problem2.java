@@ -20,11 +20,13 @@ public class Problem2{
         }
         System.out.println();
         System.out.print("Even Numbers till "+ n +" : ");
-        for(int i=1;i<=n;i++){
-            if(i%2==0){
-                System.out.print(i+" ");
+        int i=1;
+        while(i <= n){
+            if(i % 2 == 0){
+                System.out.print(i + " ");
             }
-        }
+        i++;
+ }
         System.out.println();
         System.out.println("Sum: "+sum);
     }

@@ -24,12 +24,24 @@ class Student{
         this.marks=marks;
     }
 
+    public void setId(int id){
+        this.id=id;
+    }
+
     public int getId(){
         return id;
     }
 
+    public void setName(String name){
+        this.name=name;
+    }
+
     public String getName(){
         return name;
+    }
+
+    public void setMarks(int marks){
+        this.marks=marks;
     }
 
     public int getMarks(){
@@ -39,25 +51,25 @@ class Student{
     public boolean isPassed(){
         return marks >= 40;
     }
+
+    public void displayStudentDetails(){
+        System.out.println("Student ID: "+getId());
+        System.out.println("Student Name: "+getName());
+        System.out.println("Student Marks: "+getMarks());
+        if(isPassed()){
+            System.out.println("Status: Passed");
+        }
+        else{
+            System.out.println("Status: Failed");
+        }
+    }
 }
 public class Problem4 {
     public static void main(String args[]){
-        Scanner sc=new Scanner(System.in);
-        System.out.println("Enter Student ID:");
-        int id=sc.nextInt();
-        // int id=102;
-        System.out.println("Enter Student Name:");
-        sc.nextLine();
-        String name=sc.nextLine();
-        //String name="Hiranya";
-        System.out.println("Enter Student Marks:");
-        int marks=sc.nextInt();
-        //int marks=95;
-
-        Student student=new Student(id,name,marks);
-        System.out.println("Student ID: "+student.getId());
-        System.out.println("Student Name: "+student.getName());
-        System.out.println("Student Marks: "+student.getMarks());
-        System.out.println("Is Passed: "+student.isPassed());
+        Student s=new Student(0, null, 0);
+        s.setId(1);
+        s.setName("Hiranya");
+        s.setMarks(95);
+        s.displayStudentDetails();
     }
 }

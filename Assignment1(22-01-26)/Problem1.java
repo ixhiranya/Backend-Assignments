@@ -9,7 +9,7 @@ Prints the result */
 
 import java.util.Scanner;
 public class Problem1{
-    static void EvenOdd(int n){
+    static void evenOdd(int n){
         if(n%2==0){
             System.out.print(" and Even");
         }
@@ -24,11 +24,11 @@ public class Problem1{
         System.out.print("The number is :");
         if(n>0){
             System.out.print(" Positive");
-            EvenOdd(n);
+            evenOdd(n);
         }
         else if(n<0){
             System.out.print(" Negative");
-            EvenOdd(n);
+            evenOdd(n);
         }
         else{
             System.out.println(" Zero");
