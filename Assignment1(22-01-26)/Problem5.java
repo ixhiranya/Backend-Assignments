@@ -65,8 +65,8 @@ public class Problem5{
          
         Employee emp1=new Employee(id1,name1,salary1);
         Employee emp2=new Employee(id2,name2,salary2);
-        
-        System.out.println("Result:")
+
+        System.out.println("Result:");
         System.out.println("\nEmployee 1 Details:");
         emp1.displayEmployeeDetails();
         System.out.println("\nEmployee 2 Details:");
