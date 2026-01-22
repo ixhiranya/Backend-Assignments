@@ -11,25 +11,27 @@ import java.util.Scanner;
 public class Problem1{
     static void EvenOdd(int n){
         if(n%2==0){
-            System.out.println("Even");
+            System.out.print(" and Even");
         }
         else{
-            System.out.println("Odd");
+            System.out.print(" and Odd");
         }
     }
     public static void main(String args[]){
         Scanner sc=new Scanner(System.in);
+        System.out.print("Enter a number: ");
         int n=sc.nextInt();
+        System.out.print("The number is :");
         if(n>0){
-            System.out.println("Positive");
+            System.out.print(" Positive");
             EvenOdd(n);
         }
         else if(n<0){
-            System.out.println("Negative");
+            System.out.print(" Negative");
             EvenOdd(n);
         }
         else{
-            System.out.println("Zero");
+            System.out.println(" Zero");
         }
     }
 }

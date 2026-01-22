@@ -10,7 +10,7 @@ import java.util.*;
 public class Problem3{
 
     static void add(int a,int b){
-        System.out.println("Sum: "+(a+b));
+        System.out.println("Sum of a & b : "+(a+b));
     }
 
     static boolean isEven(int number){
@@ -31,11 +31,13 @@ public class Problem3{
     }
     public static void main(String args[]){
         Scanner sc=new Scanner(System.in);
+        System.out.println("Enter two numbers a & b to add:");
         int a=sc.nextInt();
         int b=sc.nextInt();
+        System.out.println("Enter a number to check  whether it is even and find it's factorial:");
         int number=sc.nextInt();
         add(a,b);
-        System.out.println("Is Even: "+isEven(number));
+        System.out.println("Number is Even: "+isEven(number));
         findFactorial(number);
     }
 }

@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Problem2{
     
     public static void main(String args[]){
+        System.out.print("Enter a number: ");
         Scanner sc=new Scanner(System.in);
         int n=sc.nextInt();
         long sum=0;
