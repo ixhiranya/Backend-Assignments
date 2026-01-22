@@ -45,11 +45,14 @@ public class Problem4 {
         Scanner sc=new Scanner(System.in);
         System.out.println("Enter Student ID:");
         int id=sc.nextInt();
+        // int id=102;
         System.out.println("Enter Student Name:");
         sc.nextLine();
         String name=sc.nextLine();
+        //String name="Hiranya";
         System.out.println("Enter Student Marks:");
         int marks=sc.nextInt();
+        //int marks=95;
 
         Student student=new Student(id,name,marks);
         System.out.println("Student ID: "+student.getId());
