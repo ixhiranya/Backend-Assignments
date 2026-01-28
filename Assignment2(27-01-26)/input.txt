@@ -1,0 +1,8 @@
+Create a program that:
+Reads a paragraph from a file.
+Performs the following:
+Count total words, sentences, and characters (excluding spaces).
+Find the top 5 most frequent words (case-insensitive).
+Replace multiple spaces with a single space.
+Reverse each sentence without changing word order.
+Compare strings using both == and equals() and print results with explanation.
