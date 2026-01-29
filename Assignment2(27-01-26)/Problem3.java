@@ -3,13 +3,7 @@ Build a validation framework that:
 Validates username, age, and email
 Throws custom exceptions for invalid data
 Differentiates checked vs unchecked exceptions
-Logs validation completion
-Must Use
-✔ Checked exceptions
-✔ Unchecked exceptions
-✔ try-catch-finally
-✔ throw vs throws
-✔ Custom exception classes */
+Logs validation completion*/
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
