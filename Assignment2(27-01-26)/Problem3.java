@@ -56,11 +56,7 @@ public class Problem3{
             validateAge(age);
             validateEmail(email);
             logger.info("All validations passed.");
-        }catch(InvalidUsernameException e){
-            logger.log(Level.SEVERE,e.getMessage());
-        }catch(InvalidAgeException e){
-            logger.log(Level.SEVERE,e.getMessage());
-        }catch(InvalidEmailException e){
+        }catch(InvalidUsernameException | InvalidAgeException | InvalidEmailException e){
             logger.log(Level.SEVERE,e.getMessage());
         }
         finally{
