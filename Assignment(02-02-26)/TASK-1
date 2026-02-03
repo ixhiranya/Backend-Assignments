@@ -1,0 +1,40 @@
+/*TASK 1 
+Create a database called college_db 
+Create these tables: 
+STUDENTS 
+student_id (BIGINT — Primary Key) 
+name (VARCHAR) 
+email (VARCHAR — UNIQUE)     
+age (INT) 
+join_date (DATE) 
+active_flag (BOOLEAN — DEFAULT TRUE) 
+COURSES 
+course_id (INT — Primary Key) 
+course_name (VARCHAR — NOT NULL) 
+fees (DECIMAL) 
+ENROLLMENTS 
+enroll_id (BIGINT — Primary Key) 
+student_id (BIGINT) 
+course_id (INT) 
+enroll_timestamp (TIMESTAMP) */
+
+CREATE DATABASE college_db;
+
+CREATE TABLE STUDENTS(student_id BIGINT PRIMARY KEY,
+					  name VARCHAR(15),
+					  email VARCHAR(25) UNIQUE,
+					  age INT,
+					  join_date DATE,
+					  active_flag BIT DEFAULT 1);
+
+
+CREATE TABLE COURSES(course_id INT PRIMARY KEY,
+					 course_name VARCHAR(10) NOT NULL,
+					 fees DECIMAL(8,2));
+
+CREATE TABLE ENROLLMENTS(enroll_id BIGINT PRIMARY KEY,
+						 student_id BIGINT,
+						 course_id INT,
+						 enroll_timestamp TIMESTAMP,
+						 FOREIGN KEY (student_id) REFERENCES STUDENTS(student_id),
+						 FOREIGN KEY (course_id) REFERENCES COURSES(course_id));

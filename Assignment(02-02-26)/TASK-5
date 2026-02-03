@@ -1,0 +1,41 @@
+/*
+TASK 5 
+— COUNT 
+Count total students, Count active students 
+ — SUM / AVG 
+Total course fees,Average course fee,Sum of fees where fee > 2000 
+ — MIN / MAX 
+Minimum student age, Maximum course fee,Latest join_date, oldest join_date 
+— GROUP BY 
+Count students by active_flag, Count students per age ,
+Total fees per course
+ — HAVING 
+Courses having more than 3 enrollments 
+Groups where avg age > 21 
+Courses where total enrollments > 2 
+ */
+
+ /*COUNT*/
+SELECT COUNT(*) AS total_studentS FROM STUDENTS;
+SELECT COUNT(*) AS active_students FROM STUDENTS WHERE active_flag = 1;
+
+ /*SUM/AVG*/
+SELECT SUM(fees) AS total_course_fees FROM COURSES;
+SELECT AVG(fees) AS average_course_fee FROM COURSES;
+SELECT SUM(fees) AS sum_fees_above_2000 FROM COURSES WHERE fees > 2000;
+
+ /*MIN/MAX*/
+SELECT MIN(Age) FROM students;
+SELECT MAX(fees) FROM courses;
+SELECT MAX(registration_date) AS oldestjoin_date FROM students;
+SELECT MIN(registration_date) AS Latestjoin_date FROM students;
+
+ /*GROUP BY*/
+SELECT active_flag, COUNT(*) AS student_count FROM STUDENTS GROUP BY active_flag;
+SELECT age, COUNT(*) AS student_count FROM STUDENTS GROUP BY age ORDER BY age;
+SELECT course_name, SUM(fees) AS total_fees FROM COURSES GROUP BY course_name;
+
+ /*HAVING*/
+SELECT course_id, COUNT(*) AS enroll_count FROM ENROLLMENTS GROUP BY course_id HAVING COUNT(*) > 3;
+SELECT active_flag, AVG(age) AS avg_age FROM STUDENTS GROUP BY active_flag HAVING AVG(age) > 21;
+SELECT course_id, COUNT(*) AS total_enrollments FROM ENROLLMENTS GROUP BY course_id HAVING COUNT(*) > 2;

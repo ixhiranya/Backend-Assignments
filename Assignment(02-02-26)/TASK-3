@@ -1,0 +1,66 @@
+/*TASK 3 
+ — INSERT 
+Insert 3 new students 
+Insert a course with high fee value 
+Insert enrollment records 
+ — SELECT 
+Show all students 
+Show only student names and emails 
+Select students ordered by age DESC 
+Select top 5 students by join_date 
+Select DISTINCT ages of students 
+Select DISTINCT course names 
+ — UPDATE 
+Update student age where student_id = X 
+Set active_flag = FALSE for 2 students 
+Increase course fees by 10% 
+ — DELETE 
+Delete a student by ID 
+Delete courses where fee < 1000 
+Delete enrollments older than a specific date 
+ 
+ALTER   
+Change a column datatype (e.g., increase name length) 
+Rename a column (e.g., join_date → registration_date) 
+Add a new column (e.g., phone_number VARCHAR(15)) 
+*/
+
+/*INSERT*/
+INSERT INTO STUDENTS VALUES (110011,'Shrmila','shr@gmail.com',22,'2025-12-15',1,NULL);
+INSERT INTO STUDENTS VALUES (110012,'Sreya','sreya@gmail.com',NULL,'2025-11-15',0,NULL);
+INSERT INTO STUDENTS VALUES (110013,'Akki','akki@gmail.com',20,'2025-12-10',1,NULL);
+
+SELECT * FROM STUDENTS;
+
+INSERT INTO COURSES VALUES (101101, 'CSIT', 90000.00);
+
+SELECT * FROM COURSES;
+
+INSERT INTO ENROLLMENTS VALUES (30301,110011,101101,'2025-12-16 09:30:00');
+INSERT INTO ENROLLMENTS VALUES (30302,110012,101101,'2025-11-16 10:15:00');
+INSERT INTO ENROLLMENTS VALUES (30303,110013,101101,'2025-12-11 11:45:00');
+
+SELECT * FROM ENROLLMENTS;
+
+/*SELECT*/
+SELECT * FROM STUDENTS;
+SELECT name,email FROM STUDENTS;
+SELECT * FROM STUDENTS ORDER BY age DESC;
+SELECT TOP 5 * FROM STUDENTS ORDER BY join_date DESC;
+SELECT DISTINCT age FROM STUDENTS;
+SELECT DISTINCT course_name FROM COURSES;
+
+/*UPDATE*/
+UPDATE STUDENTS SET Age=26 WHERE student_id=110013;
+UPDATE STUDENTS SET active_flag = 0 WHERE student_id IN (1, 2);
+UPDATE COURSES SET fees = fees * 1.10;
+
+/*DELETE*/
+DELETE FROM STUDENTS WHERE student_id=110012;
+DELETE FROM COURSES WHERE fees<1000;
+DELETE FROM ENROLLMENTS WHERE enroll_timestamp < '2025-01-01';
+
+/*ALTER*/
+ALTER TABLE STUDENTS ALTER COLUMN name varchar(200);
+EXEC sp_rename 'students.join_date','registration_date','COLUMN';
+ALTER TABLE STUDENTS ADD phone_number VARCHAR(15);

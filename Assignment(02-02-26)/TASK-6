@@ -1,0 +1,13 @@
+/*TASK 6 
+ — Combined Queries 
+Get students ordered by age with filter age > 20 
+Count students whose name LIKE '%a%' 
+Show courses with fee BETWEEN range and ordered by fee 
+Get inactive students with age IS NOT NULL 
+Show grouped enrollments with HAVING count > 1 */
+
+SELECT * FROM STUDENTS WHERE age>20 ORDER BY age ASC;
+SELECT COUNT(*) AS Count_of_students FROM STUDENTS WHERE name LIKE '%a%';
+SELECT * FROM COURSES WHERE fees BETWEEN 2000 AND 100000 ORDER BY fees;
+SELECT * FROM STUDENTS WHERE active_flag=0 AND age IS NOT NULL;
+SELECT course_id,COUNT(*) AS enroll_count FROM ENROLLMENTS GROUP BY course_id HAVING COUNT(*) > 1;

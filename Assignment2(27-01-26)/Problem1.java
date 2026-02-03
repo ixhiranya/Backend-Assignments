@@ -79,6 +79,7 @@ public class Problem1{
             }
             System.out.println(reversedSentence.toString());
         }
+        br.close();
     }  catch(IOException e){
         System.out.println("An error occurred: "+e.getMessage()); 
     }

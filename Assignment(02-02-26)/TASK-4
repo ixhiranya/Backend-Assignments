@@ -1,0 +1,41 @@
+/*
+TASK 4  
+ — WHERE  
+Select students age > 21 
+Select active students only 
+Select courses with fee BETWEEN 1000 AND 5000 
+Select students with age IN (20, 22, 25) 
+ — AND / OR 
+Students age > 20 AND active 
+Students age < 20 OR inactive 
+Courses with fee > 2000 AND name LIKE '%Data%' 
+ — LIKE Pattern 
+Emails ending with ‘gmail.com’ (%gmail.com) 
+Course names starting with ‘Data’ (Data%) 
+Cities containing ‘new’ anywhere (%new%) 
+ — NULL Checks 
+Insert a student with NULL age 
+Select students where age IS NULL 
+Select students where age IS NOT NULL 
+*/
+
+/*WHERE*/
+SELECT age FROM STUDENTS WHERE age>21;
+SELECT name FROM STUDENTS WHERE active_flag=1;
+SELECT course_name FROM COURSES WHERE fees BETWEEN 20000 AND 50000;
+SELECT name FROM STUDENTS WHERE age IN(20,22,25);
+
+/*AND/OR*/
+SELECT name FROM STUDENTS WHERE Age>20 AND active_flag=1;
+SELECT name FROM STUDENTS WHERE Age < 20 OR active_flag=0;
+SELECT course_name FROM COURSES WHERE fees > 2000 AND course_name LIKE '%S%' ;
+
+/*LIKE*/
+SELECT email FROM STUDENTS WHERE email LIKE '%gmail.com';
+SELECT course_name FROM COURSES WHERE course_name LIKE 'C%';
+SELECT NAME FROM STUDENTS WHERE name LIKE '%ya%';
+
+/*NULL CHECKS*/
+INSERT INTO STUDENTS (student_id, name, email, registration_date, active_flag)VALUES(110012,'Sreya','sreya@gmail.com','2025-11-15',0);
+SELECT * FROM STUDENTS WHERE age IS NULL;
+SELECT * FROM STUDENTS WHERE age IS NOT NULL;
