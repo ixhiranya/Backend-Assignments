@@ -1,1 +1,107 @@
 /*JOIN + GROUP BY Tasks*/
+
+SELECT c.c_name,COUNT(c.order_id) AS order_count FROM CUSTOMERS c LEFT JOIN ORDERS o ON c.order_id=o.order_id GROUP BY c.customer_id ,c.c_name;
+
+SELECT c.c_name,SUM(o.amount) AS total_order_amount FROM CUSTOMERS c JOIN ORDERS o ON c.customer_id = o.customer_id GROUP BY c.c_name;
+
+SELECT d.dept_name,COUNT(e.emp_id) AS No_of_employees FROM DEPARTMENT d LEFT JOIN EMPLOYEES e ON d.dept_id=e.dept_id GROUP BY d.dept_name;
+
+SELECT p.p_name,COUNT(o.order_id) AS No_of_orders FROM PRODUCTS p LEFT JOIN ORDERS o ON p.o_id=o.order_id GROUP BY p.p_name;
+
+SELECT d.dept_name,SUM(e.salary) AS No_of_employees FROM DEPARTMENT d LEFT JOIN EMPLOYEES e ON d.dept_id=e.dept_id GROUP BY d.dept_name;
+
+/*JOIN + HAVING Tasks*/
+
+SELECT c.c_name,COUNT(c.order_id) AS orders_count_more_than_3 FROM CUSTOMERS c LEFT JOIN ORDERS o ON c.order_id=o.order_id GROUP BY c.customer_id ,c.c_name HAVING COUNT(c.order_id)>3;
+
+SELECT d.dept_name,COUNT(e.emp_id) AS dept_with_more_than_5_emps FROM DEPARTMENT d LEFT JOIN EMPLOYEES e ON d.dept_id=e.dept_id GROUP BY d.dept_name HAVING COUNT(e.emp_id)>1;
+
+SELECT p.p_name,COUNT(o.order_id) AS No_of_orders FROM PRODUCTS p LEFT JOIN ORDERS o ON p.o_id=o.order_id GROUP BY p.p_name HAVING COUNT(p.o_id)>10;
+
+SELECT c.c_name,SUM(o.amount) AS orders_amount FROM CUSTOMERS c JOIN ORDERS o ON c.order_id=o.order_id GROUP BY c.customer_id ,c.c_name HAVING SUM(o.amount)>5000;
+
+/*JOIN + COUNT*/
+
+SELECT c.c_name,COUNT(c.order_id) AS order_count FROM CUSTOMERS c LEFT JOIN ORDERS o ON c.order_id=o.order_id GROUP BY c.customer_id ,c.c_name;
+
+SELECT d.dept_name,COUNT(e.emp_id) AS No_of_employees FROM DEPARTMENT d LEFT JOIN EMPLOYEES e ON d.dept_id=e.dept_id GROUP BY d.dept_name;
+
+SELECT * FROM PRODUCTS;
+
+ALTER TABLE PRODUCTS ADD category VARCHAR(30);
+
+UPDATE PRODUCTS SET category = 'Electronics' WHERE p_name IN ('Laptop','Tablet','Camera');
+UPDATE PRODUCTS SET category = 'Accessories' WHERE p_name IN ('Mouse','Keyboard','Headset','Charger');
+UPDATE PRODUCTS SET category = 'Peripherals' WHERE p_name IN ('Monitor','Printer');
+UPDATE PRODUCTS SET category = 'Storage' WHERE p_name = 'USB';
+
+SELECT * FROM PRODUCTS;
+
+SELECT p1.category,COUNT(p2.p_id) AS product_count FROM PRODUCTS p1 JOIN PRODUCTS p2 ON p1.category=p2.category GROUP BY p1.category;
+
+SELECT c.city,COUNT(o.order_id) AS Orders_count FROM CUSTOMERS c JOIN ORDERS o ON c.customer_id=o.customer_id GROUP BY c.city; 
+
+/*JOIN + WHERE Tasks*/
+
+SELECT c.customer_id, c.c_name, c.email,o.order_date,o.order_id FROM CUSTOMERS c JOIN ORDERS o ON c.order_id=o.order_id WHERE o.order_date>'2026-01-01 00:00:00';
+
+SELECT * FROM DEPARTMENT;
+SELECT e.emp_id,e.emp_name FROM EMPLOYEES e JOIN DEPARTMENT d ON e.dept_id=d.dept_id WHERE d.dept_id=1;
+
+SELECT * FROM ORDERS;
+UPDATE ORDERS SET city = 'Hyderabad' WHERE order_id IN (1001,1003,1008);
+UPDATE ORDERS SET city = 'Bangalore' WHERE order_id IN (1002,1006,1010,1011);
+UPDATE ORDERS SET city = 'Chennai'   WHERE order_id IN (1004,1007);
+UPDATE ORDERS SET city = 'Mumbai'    WHERE order_id IN (1005,1009);
+
+SELECT c.customer_id, c.c_name, c.email,o.order_date,o.order_id FROM CUSTOMERS c JOIN ORDERS o ON c.order_id=o.order_id WHERE o.City='Hyderabad';
+
+SELECT p.p_id,p.p_name,o.amount FROM PRODUCTS p JOIN ORDERS o ON p.o_id=o.order_id WHERE p.amount>1000;
+
+/*JOIN + LIKE*/
+
+SELECT c.customer_id, c.c_name, c.email,o.order_date,o.order_id FROM CUSTOMERS c JOIN ORDERS o ON c.order_id=o.order_id WHERE c.c_name LIKE 'a%';
+
+SELECT e.emp_id,e.emp_name,d.dept_name FROM EMPLOYEES e JOIN DEPARTMENT d ON e.dept_id=d.dept_id WHERE e.emp_name LIKE '%a%';
+
+SELECT * FROM ORDERS;
+SELECT p.p_id,p.p_name,o.order_date,o.amount FROM PRODUCTS p JOIN ORDERS o ON p.o_id=o.order_id WHERE CONVERT(VARCHAR, order_date, 120) LIKE '2026-02-05%';
+
+/*JOIN + CONSTRAINTS*/
+
+ALTER TABLE ORDERS ADD FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(customer_id);
+
+SELECT c.customer_id, c.c_name, o.order_id, o.amount FROM CUSTOMERS c INNER JOIN ORDERS o ON c.customer_id = o.customer_id;
+
+INSERT INTO ORDERS VALUES(1012,5200,'2026-01-05 18:45:00',11);
+/*Msg 547, Level 16, State 0, Line 47
+The INSERT statement conflicted with the FOREIGN KEY constraint "FK__ORDERS__customer__5812160E". The conflict occurred in database "college_db", table "dbo.CUSTOMERS", column 'customer_id'.
+The statement has been terminated.*/
+
+ALTER TABLE ORDERS ADD CONSTRAINT UQ_orders_orderdate UNIQUE(order_id);
+SELECT * FROM ORDERS;
+SELECT o.order_id, c.c_name, c.email FROM ORDERS o JOIN CUSTOMERS c ON o.customer_id = c.customer_id WHERE o.order_id = 1001;
+
+SELECT * FROM EMPLOYEES e JOIN DEPARTMENT d ON e.dept_id=d.dept_id WHERE e.salary IS NULL;
+
+INSERT INTO ORDERS(order_id, amount, order_date, customer_id) VALUES (9999, 1000, GETDATE(), 999);
+/*Msg 547, Level 16, State 0, Line 241
+The INSERT statement conflicted with the FOREIGN KEY constraint "FK__ORDERS__customer__5812160E". The conflict occurred in database "college_db", table "dbo.CUSTOMERS", column 'customer_id'.
+The statement has been terminated.*/
+
+ALTER TABLE ORDERS DROP CONSTRAINT [FK__ORDERS__customer__5812160E];
+INSERT INTO ORDERS VALUES (9999, 1000, GETDATE(), 999, 'Hyderabad');
+
+SELECT * FROM CUSTOMERS c INNER JOIN ORDERS o ON c.customer_id = o.customer_id;
+
+/*JOIN + SUBQUERY TASKS(IN / NOT IN / EXISTS / NOT EXISTS)*/
+
+SELECT * FROM CUSTOMERS;
+SELECT * FROM CUSTOMERS c JOIN ORDERS o ON c.order_id=o.order_id WHERE c.customer_id IN (101,102,172)
+
+SELECT * FROM CUSTOMERS c JOIN ORDERS o ON c.order_id=o.order_id WHERE c.customer_id NOT IN (101,102,172)
+
+SELECT p.* FROM PRODUCTS p LEFT JOIN ORDER_ITEMS oi ON p.p_id = oi.product_id WHERE oi.product_id IS NULL;
+
+SELECT e.* FROM EMPLOYEES e LEFT JOIN DEPARTMENT d ON e.dept_id = d.dept_id WHERE d.dept_id IS NULL;
+
