@@ -1,0 +1,300 @@
+/*SQL_ASSIGNMENT_2*/
+
+/*Relationship Tasks*/
+
+CREATE TABLE CUSTOMERS(customer_id INT PRIMARY KEY,
+					   c_name VARCHAR(15),
+					   email VARCHAR(25),
+					   order_id INT);
+
+CREATE TABLE ORDERS(order_id INT PRIMARY KEY,
+					amount BIGINT,
+					order_date DATETIME,
+					customer_id INT NOT NULL);
+
+ALTER TABLE ORDERS ADD FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(customer_id);
+
+ALTER TABLE CUSTOMERS ALTER COLUMN c_name VARCHAR(15) NOT NULL;
+
+SELECT * FROM CUSTOMERS WHERE c_name IS NULL;
+
+ALTER TABLE CUSTOMERS ADD CONSTRAINT UQ_customers_cname UNIQUE (c_name);
+
+ALTER TABLE CUSTOMERS DROP CONSTRAINT UQ_customers_cname;
+
+ALTER TABLE CUSTOMERS ADD CONSTRAINT UQ_customers_email UNIQUE (email);
+
+INSERT INTO CUSTOMERS VALUES (101,'Hiranya','hiranya@gmail.com',1001),
+							 (102,'Ashmitha','ashu@gmail.com',1002),
+							 (103,'Harati','harati@gmail.com',1011),
+							 (104,'Divya','divya@gmail.com',1201);
+
+SELECT * FROM CUSTOMERS;
+
+INSERT INTO ORDERS VALUES(1001,1200,'2026-02-05 16:11:00',101),
+                         (1002,2500,'2026-02-05 16:20:00',102),
+						 (1003,1800,'2026-02-05 16:35:00',101),
+						 (1004,3200,'2026-02-05 17:00:00',103),
+						 (1005,900,'2026-02-05 17:10:00',104),
+						 (1006,1500,'2026-02-05 17:25:00',102),
+						 (1007,2750,'2026-02-05 17:40:00',103),
+						 (1008,600,'2026-02-05 18:00:00',101),
+						 (1009,4100,'2026-02-05 18:20:00',104),
+						 (1010,2200,'2026-02-05 18:45:00',102);
+
+SELECT * FROM ORDERS;
+
+INSERT INTO ORDERS VALUES(1012,5200,'2026-01-05 18:45:00',11);
+/*Msg 547, Level 16, State 0, Line 47
+The INSERT statement conflicted with the FOREIGN KEY constraint "FK__ORDERS__customer__5812160E". The conflict occurred in database "college_db", table "dbo.CUSTOMERS", column 'customer_id'.
+The statement has been terminated.*/
+
+CREATE TABLE STUDENT(s_id INT PRIMARY KEY,
+                     s_name VARCHAR(10),
+					 phone_no INT);
+
+CREATE TABLE COURSE(c_id INT PRIMARY KEY,
+                    c_name VARCHAR(16),
+					date DATE);
+
+CREATE TABLE JUNCTION(j_id INT PRIMARY KEY,stu_id INT,cou_id INT,
+					  FOREIGN KEY (stu_id) REFERENCES STUDENT(s_id),
+					  FOREIGN KEY (cou_id) REFERENCES COURSE(c_id));
+
+/*INNER JOIN*/
+SELECT * FROM CUSTOMERS INNER JOIN ORDERS ON CUSTOMERS.order_id=ORDERS.order_id;
+
+ALTER TABLE ORDERS ADD City VARCHAR(10);
+SELECT CUSTOMERS.c_name, ORDERS.City FROM CUSTOMERS INNER JOIN ORDERS ON CUSTOMERS.order_id=ORDERS.order_id;
+
+CREATE TABLE PRODUCTS(p_id INT PRIMARY KEY,p_name VARCHAR(12),amount INT NOT NULL,c_id INT,o_id INT,
+                     FOREIGN KEY (c_id) REFERENCES CUSTOMERS(customer_id),
+					 FOREIGN KEY (o_id)  REFERENCES ORDERS(order_id));
+
+INSERT INTO PRODUCTS VALUES
+(1,'Laptop',55000,101,1001),
+(2,'Mouse',800,102,1002),
+(3,'Keyboard',1500,101,1003),
+(4,'Monitor',12000,103,1004),
+(5,'USB',600,104,1005),
+(6,'Headset',2200,102,1006),
+(7,'Tablet',30000,103,1007),
+(8,'Charger',900,101,1008),
+(9,'Printer',15000,104,1009),
+(10,'Camera',45000,102,1010);
+
+SELECT * FROM PRODUCTS p INNER JOIN CUSTOMERS c ON p.c_id = c.customer_id
+							  INNER JOIN ORDERS o ON p.o_id = o.order_id;
+
+SELECT c.customer_id, c.c_name, c.email, o.order_id, p.p_name, p.amount FROM PRODUCTS p
+INNER JOIN CUSTOMERS c ON p.c_id=c.customer_id
+INNER JOIN ORDERS o ON p.o_id=o.order_id;
+
+SELECT c.customer_id, c.c_name, c.email, o.order_id, p.p_name, p.amount FROM PRODUCTS p
+INNER JOIN CUSTOMERS c ON p.c_id=c.customer_id
+INNER JOIN ORDERS o ON p.o_id=o.order_id 
+WHERE p.amount>10000;
+
+SELECT c.customer_id, c.c_name, c.email, o.order_id, p.p_name, p.amount FROM PRODUCTS p
+INNER JOIN CUSTOMERS c ON p.c_id=c.customer_id
+INNER JOIN ORDERS o ON p.o_id=o.order_id
+WHERE c.c_name LIKE '%a';
+
+/*LEFT JOIN*/
+SELECT * FROM CUSTOMERS LEFT JOIN  ORDERS ON CUSTOMERS.order_id=ORDERS.order_id ;
+
+SELECT * FROM CUSTOMERS LEFT JOIN  ORDERS ON CUSTOMERS.order_id=ORDERS.order_id WHERE CUSTOMERS.order_id IS NULL;
+INSERT INTO CUSTOMERS (customer_id,c_name,email) VALUES(172,'Sai','sai@gmail.com');
+
+CREATE TABLE DEPARTMENT ( dept_id INT PRIMARY KEY,
+						  dept_name VARCHAR(50) NOT NULL UNIQUE,
+						  location VARCHAR(50));
+
+CREATE TABLE EMPLOYEES ( emp_id INT PRIMARY KEY,
+						 emp_name VARCHAR(50) NOT NULL,
+						 salary INT NOT NULL,
+						 hire_date DATETIME,
+						 dept_id INT,
+						 CONSTRAINT fk_emp_dept FOREIGN KEY (dept_id) REFERENCES DEPARTMENT(dept_id));
+
+INSERT INTO DEPARTMENT VALUES
+(1,'HR','Block A'),
+(2,'IT','Block B'),
+(3,'Finance','Block C'),
+(4,'Sales','Block D');
+
+INSERT INTO EMPLOYEES VALUES
+(101,'Hiranya',60000,'2023-01-10',2),
+(102,'Ashmitha',55000,'2023-03-12',2),
+(103,'Harati',50000,'2022-11-05',1),
+(104,'Divya',72000,'2021-07-19',3),
+(105,'Aysh',48000,'2024-02-01',4),
+(106,'Vibhu',80000,'2020-09-09',2),
+(107,'Addy',45000,'2024-06-15',NULL); 
+
+SELECT * FROM DEPARTMENT LEFT JOIN EMPLOYEES ON DEPARTMENT.dept_id=EMPLOYEES.dept_id WHERE emp_id IS NOT NULL ; 
+SELECT * FROM DEPARTMENT LEFT JOIN EMPLOYEES ON DEPARTMENT.dept_id=EMPLOYEES.dept_id WHERE emp_id IS NULL; 
+
+INSERT INTO DEPARTMENT VALUES(5,'BA','Block H');
+
+SELECT * FROM PRODUCTS LEFT JOIN ORDERS ON PRODUCTS.o_id=ORDERS.order_id WHERE order_id IS NULL;
+
+SELECT * FROM PRODUCTS LEFT JOIN ORDERS ON PRODUCTS.o_id=ORDERS.order_id WHERE PRODUCTS.amount < 10000;
+
+SELECT * FROM PRODUCTS LEFT JOIN ORDERS ON PRODUCTS.o_id=ORDERS.order_id WHERE PRODUCTS.p_name LIKE 'c%';
+
+/*RIGHT JOIN*/
+
+SELECT * FROM CUSTOMERS RIGHT JOIN ORDERS ON ORDERS.order_id=CUSTOMERS.order_id;
+
+SELECT * FROM CUSTOMERS RIGHT JOIN ORDERS ON ORDERS.order_id=CUSTOMERS.order_id WHERE CUSTOMERS.customer_id IS NULL;
+
+SELECT d.dept_name,e.emp_name FROM DEPARTMENT d RIGHT JOIN EMPLOYEES e ON d.dept_id=e.dept_id;
+
+SELECT d.dept_name,e.emp_name,e.salary FROM EMPLOYEES e RIGHT JOIN DEPARTMENT d ON e.dept_id = d.dept_id WHERE d.dept_name = 'IT';
+
+SELECT d.dept_name,COUNT(e.emp_id) AS emp_count FROM EMPLOYEES e RIGHT JOIN DEPARTMENT d ON e.dept_id = d.dept_id GROUP BY d.dept_name;
+
+/*FULL OUTER JOIN*/
+SELECT c.customer_id,c.c_name,o.order_id,o.amount FROM CUSTOMERS c LEFT JOIN ORDERS o ON c.customer_id = o.customer_id
+UNION 
+SELECT c.customer_id,c.c_name,o.order_id,o.amount FROM CUSTOMERS c RIGHT JOIN ORDERS o ON c.customer_id = o.customer_id;
+   
+SELECT c.customer_id,c.c_name,o.order_id,'Matched/LeftSide' AS src FROM CUSTOMERS c LEFT JOIN ORDERS o ON c.customer_id = o.customer_id
+UNION 
+SELECT c.customer_id,c.c_name,o.order_id,'RightOnly' AS src FROM CUSTOMERS c RIGHT JOIN ORDERS o ON c.customer_id = o.customer_id WHERE c.customer_id IS NULL;
+ 
+SELECT e.emp_name,d.dept_name FROM EMPLOYEES e LEFT JOIN DEPARTMENT d ON e.dept_id=d.dept_id
+UNION 
+SELECT e.emp_name,d.dept_name FROM EMPLOYEES e RIGHT JOIN DEPARTMENT d ON e.dept_id=d.dept_id;
+
+/*SELF JOIN*/
+
+ALTER TABLE EMPLOYEES ADD manager_id INT;
+SELECT * FROM EMPLOYEES;
+
+ALTER TABLE EMPLOYEES ADD CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES EMPLOYEES(emp_id);
+
+UPDATE EMPLOYEES SET manager_id = 106 WHERE emp_id IN (101,102);
+UPDATE EMPLOYEES SET manager_id = 103 WHERE emp_id = 105;
+UPDATE EMPLOYEES SET manager_id = 104 WHERE emp_id = 107;
+UPDATE EMPLOYEES SET manager_id = NULL WHERE emp_id IN (103,104,106);
+
+SELECT  e.emp_name AS Employee,m.emp_name AS Manager FROM EMPLOYEES e, EMPLOYEES m WHERE e.manager_id = m.emp_id;
+
+SELECT  m.emp_name AS Manager,e.emp_name AS Employee FROM EMPLOYEES e, EMPLOYEES m WHERE e.manager_id = m.emp_id ORDER BY m.emp_name;
+
+SELECT  DISTINCT m.emp_id,m.emp_name AS Manager FROM EMPLOYEES e, EMPLOYEES m WHERE e.manager_id = m.emp_id;
+
+ALTER TABLE EMPLOYEES ADD mentor_id INT;
+
+ALTER TABLE EMPLOYEES ADD CONSTRAINT fk_mentor FOREIGN KEY (mentor_id) REFERENCES EMPLOYEES(emp_id);
+
+UPDATE EMPLOYEES SET mentor_id = 106 WHERE emp_id IN (101,102,105);
+UPDATE EMPLOYEES SET mentor_id = 104 WHERE emp_id IN (103,107);
+UPDATE EMPLOYEES SET mentor_id = 103 WHERE emp_id = 102;
+UPDATE EMPLOYEES SET mentor_id = NULL WHERE emp_id IN (104,106);
+
+SELECT  e.emp_name AS Employee,ma.emp_name AS Mentor FROM EMPLOYEES e, EMPLOYEES ma WHERE e.mentor_id = ma.emp_id;
+
+SELECT mgr.emp_name  AS Manager,men.emp_name AS Mentor,e.emp_name AS Employee, e.salary,e.hire_date
+FROM EMPLOYEES e lEFT JOIN EMPLOYEES mgr ON e.manager_id = mgr.emp_id LEFT JOIN EMPLOYEES men ON e.mentor_id = men.emp_id
+ORDER BY Manager, Mentor, Employee;
+
+/*CROSS JOIN*/
+
+SELECT c.customer_id,c.c_name,p.p_id,p.p_name FROM CUSTOMERS c CROSS JOIN PRODUCTS p;
+
+CREATE TABLE ROLES (role_id INT PRIMARY KEY,role_name VARCHAR(30));
+
+INSERT INTO ROLES VALUES (1,'Developer'), (2,'Tester'), (3,'Manager'), (4,'Analyst');
+
+SELECT e.emp_name,r.role_name FROM EMPLOYEES e CROSS JOIN ROLES r;
+
+SELECT * FROM CUSTOMERS c CROSS JOIN PRODUCTS p;
+
+/*MULTIPLE-TABLE JOIN*/
+
+CREATE TABLE ORDER_ITEMS (item_id INT PRIMARY KEY,
+						 order_id INT,
+						 product_id INT,
+						 qty INT,
+						 price INT,
+    					 FOREIGN KEY (order_id) REFERENCES ORDERS(order_id),
+						 FOREIGN KEY (product_id) REFERENCES PRODUCTS(p_id));
+
+INSERT INTO ORDER_ITEMS VALUES
+(1,1001,1,1,55000),
+(2,1001,2,2,800),
+(3,1002,3,1,1500),
+(4,1002,6,1,2200),
+(5,1003,4,1,12000),
+(6,1004,7,1,30000),
+(7,1004,5,3,600),
+(8,1005,8,2,900),
+(9,1006,9,1,15000),
+(10,1007,10,1,45000);
+
+SELECT * FROM CUSTOMERS c
+JOIN ORDERS o ON c.customer_id = o.customer_id
+JOIN ORDER_ITEMS oi ON o.order_id = oi.order_id;
+
+CREATE TABLE SUPPLIERS (supplier_id INT PRIMARY KEY,
+						supplier_name VARCHAR(50));
+
+ALTER TABLE PRODUCTS ADD supplier_id INT;
+ALTER TABLE PRODUCTS ADD CONSTRAINT fk_prod_supplier FOREIGN KEY (supplier_id) REFERENCES SUPPLIERS(supplier_id);
+
+INSERT INTO SUPPLIERS VALUES
+(201,'TechSource Pvt Ltd'),
+(202,'Global Gadgets'),
+(203,'Prime Electronics'),
+(204,'NextGen Supplies'),
+(205,'SmartWare Distributors');
+
+UPDATE PRODUCTS SET supplier_id = 201 WHERE p_id IN (1,3,8);
+UPDATE PRODUCTS SET supplier_id = 202 WHERE p_id IN (2,6);
+UPDATE PRODUCTS SET supplier_id = 203 WHERE p_id IN (4,9);
+UPDATE PRODUCTS SET supplier_id = 204 WHERE p_id IN (5,7);
+UPDATE PRODUCTS SET supplier_id = 205 WHERE p_id = 10;
+
+SELECT * FROM ORDERS o
+JOIN PRODUCTS p ON o.order_id = p.o_id
+JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id;
+
+CREATE TABLE LOCATIONS (location_id INT PRIMARY KEY,
+						city VARCHAR(50));
+
+ALTER TABLE DEPARTMENT ADD location_id INT;
+
+ALTER TABLE DEPARTMENT ADD CONSTRAINT fk_dept_loc FOREIGN KEY (location_id) REFERENCES LOCATIONS(location_id);
+
+INSERT INTO LOCATIONS VALUES
+(1,'Hyderabad'),
+(2,'Bangalore'),
+(3,'Chennai'),
+(4,'Mumbai'),
+(5,'Delhi');
+
+UPDATE DEPARTMENT SET location_id = 1 WHERE dept_id = 1;
+UPDATE DEPARTMENT SET location_id = 2 WHERE dept_id = 2;
+UPDATE DEPARTMENT SET location_id = 3 WHERE dept_id = 3;
+UPDATE DEPARTMENT SET location_id = 4 WHERE dept_id = 4;
+
+
+SELECT * FROM EMPLOYEES e
+JOIN DEPARTMENT d ON e.dept_id = d.dept_id
+JOIN LOCATIONS l ON d.location_id = l.location_id;
+
+SELECT * FROM CUSTOMERS c
+JOIN ORDERS o ON c.customer_id = o.customer_id
+JOIN ORDER_ITEMS oi ON o.order_id = oi.order_id
+JOIN PRODUCTS p ON oi.product_id = p.p_id
+ORDER BY o.order_id;
+
+SELECT c.customer_id,c.c_name,o.order_id,o.order_date,p.p_id,p.p_name,oi.qty,s.supplier_name
+FROM CUSTOMERS c
+JOIN ORDERS o ON c.customer_id = o.customer_id
+JOIN ORDER_ITEMS oi ON o.order_id = oi.order_id
+JOIN PRODUCTS p ON oi.product_id = p.p_id
+JOIN SUPPLIERS s ON p.supplier_id = s.supplier_id;
