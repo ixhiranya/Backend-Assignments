@@ -1,6 +1,6 @@
 /*SQL_ASSIGNMENT_2*/
 
-/*Relationship Tasks*/
+/*1.Relationship Tasks*/
 
 CREATE TABLE CUSTOMERS(customer_id INT PRIMARY KEY,
 					   c_name VARCHAR(15),
@@ -61,7 +61,7 @@ CREATE TABLE JUNCTION(j_id INT PRIMARY KEY,stu_id INT,cou_id INT,
 					  FOREIGN KEY (stu_id) REFERENCES STUDENT(s_id),
 					  FOREIGN KEY (cou_id) REFERENCES COURSE(c_id));
 
-/*INNER JOIN*/
+/*2.INNER JOIN*/
 SELECT * FROM CUSTOMERS INNER JOIN ORDERS ON CUSTOMERS.order_id=ORDERS.order_id;
 
 ALTER TABLE ORDERS ADD City VARCHAR(10);
@@ -100,7 +100,7 @@ INNER JOIN CUSTOMERS c ON p.c_id=c.customer_id
 INNER JOIN ORDERS o ON p.o_id=o.order_id
 WHERE c.c_name LIKE '%a';
 
-/*LEFT JOIN*/
+/*3.LEFT JOIN*/
 SELECT * FROM CUSTOMERS LEFT JOIN  ORDERS ON CUSTOMERS.order_id=ORDERS.order_id ;
 
 SELECT * FROM CUSTOMERS LEFT JOIN  ORDERS ON CUSTOMERS.order_id=ORDERS.order_id WHERE CUSTOMERS.order_id IS NULL;
@@ -143,7 +143,7 @@ SELECT * FROM PRODUCTS LEFT JOIN ORDERS ON PRODUCTS.o_id=ORDERS.order_id WHERE P
 
 SELECT * FROM PRODUCTS LEFT JOIN ORDERS ON PRODUCTS.o_id=ORDERS.order_id WHERE PRODUCTS.p_name LIKE 'c%';
 
-/*RIGHT JOIN*/
+/*4.RIGHT JOIN*/
 
 SELECT * FROM CUSTOMERS RIGHT JOIN ORDERS ON ORDERS.order_id=CUSTOMERS.order_id;
 
@@ -155,7 +155,7 @@ SELECT d.dept_name,e.emp_name,e.salary FROM EMPLOYEES e RIGHT JOIN DEPARTMENT d 
 
 SELECT d.dept_name,COUNT(e.emp_id) AS emp_count FROM EMPLOYEES e RIGHT JOIN DEPARTMENT d ON e.dept_id = d.dept_id GROUP BY d.dept_name;
 
-/*FULL OUTER JOIN*/
+/*5.FULL OUTER JOIN*/
 SELECT c.customer_id,c.c_name,o.order_id,o.amount FROM CUSTOMERS c LEFT JOIN ORDERS o ON c.customer_id = o.customer_id
 UNION 
 SELECT c.customer_id,c.c_name,o.order_id,o.amount FROM CUSTOMERS c RIGHT JOIN ORDERS o ON c.customer_id = o.customer_id;
@@ -168,7 +168,7 @@ SELECT e.emp_name,d.dept_name FROM EMPLOYEES e LEFT JOIN DEPARTMENT d ON e.dept_
 UNION 
 SELECT e.emp_name,d.dept_name FROM EMPLOYEES e RIGHT JOIN DEPARTMENT d ON e.dept_id=d.dept_id;
 
-/*SELF JOIN*/
+/*6.SELF JOIN*/
 
 ALTER TABLE EMPLOYEES ADD manager_id INT;
 SELECT * FROM EMPLOYEES;
@@ -201,7 +201,7 @@ SELECT mgr.emp_name  AS Manager,men.emp_name AS Mentor,e.emp_name AS Employee, e
 FROM EMPLOYEES e lEFT JOIN EMPLOYEES mgr ON e.manager_id = mgr.emp_id LEFT JOIN EMPLOYEES men ON e.mentor_id = men.emp_id
 ORDER BY Manager, Mentor, Employee;
 
-/*CROSS JOIN*/
+/*7.CROSS JOIN*/
 
 SELECT c.customer_id,c.c_name,p.p_id,p.p_name FROM CUSTOMERS c CROSS JOIN PRODUCTS p;
 
@@ -213,7 +213,7 @@ SELECT e.emp_name,r.role_name FROM EMPLOYEES e CROSS JOIN ROLES r;
 
 SELECT * FROM CUSTOMERS c CROSS JOIN PRODUCTS p;
 
-/*MULTIPLE-TABLE JOIN*/
+/*8.MULTIPLE-TABLE JOIN*/
 
 CREATE TABLE ORDER_ITEMS (item_id INT PRIMARY KEY,
 						 order_id INT,
