@@ -116,6 +116,14 @@ SELECT * FROM DEPARTMENT WHERE dept_id IN (SELECT DISTINCT dept_id FROM EMPLOYEE
 SELECT * FROM CUSTOMERS;
 SELECT * FROM CUSTOMERS WHERE order_id IN (SELECT order_id FROM ORDERS WHERE order_id IS NOT NULL );
 
+SELECT DISTINCT c.customer_id, c.c_name FROM CUSTOMERS c
+JOIN ORDERS o ON c.customer_id = o.customer_id
+WHERE EXISTS (SELECT * FROM ORDERS x WHERE x.customer_id = c.customer_id);
+
+SELECT DISTINCT c.customer_id, c.c_name FROM CUSTOMERS c
+JOIN ORDERS o ON c.customer_id = o.customer_id
+WHERE NOT EXISTS (SELECT * FROM ORDERS x WHERE x.customer_id<1);
+
 SELECT * FROM CUSTOMERS c JOIN ORDERS o ON c.customer_id = o.customer_id AND o.amount > ( SELECT AVG(amount) FROM ORDERS );
 
 SELECT c.c_name, t.total_orders FROM CUSTOMERS c JOIN (SELECT customer_id, COUNT(*) total_orders FROM ORDERS GROUP BY customer_id) t ON c.customer_id = t.customer_id;
@@ -139,7 +147,7 @@ JOIN (
     GROUP BY dept_id
 ) t ON d.dept_id = t.dept_id;
 
-/*MULTI-SELECT JOINS*/
+/*16.MULTI-SELECT JOINS*/
 
 SELECT c.c_name,o.order_id,o.amount,
 (SELECT COUNT(*) FROM ORDERS x WHERE x.customer_id = c.customer_id) AS total_orders,

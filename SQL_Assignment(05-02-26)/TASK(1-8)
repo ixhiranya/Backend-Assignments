@@ -84,7 +84,7 @@ INSERT INTO PRODUCTS VALUES
 (10,'Camera',45000,102,1010);
 
 SELECT * FROM PRODUCTS p INNER JOIN CUSTOMERS c ON p.c_id = c.customer_id
-							  INNER JOIN ORDERS o ON p.o_id = o.order_id;
+						 INNER JOIN ORDERS o ON p.o_id = o.order_id;
 
 SELECT c.customer_id, c.c_name, c.email, o.order_id, p.p_name, p.amount FROM PRODUCTS p
 INNER JOIN CUSTOMERS c ON p.c_id=c.customer_id
