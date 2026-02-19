@@ -1,0 +1,227 @@
+create database Customer_Accounts_Module;
+
+CREATE TABLE CUSTOMERS(cust_id INT IDENTITY(1,1) PRIMARY KEY,
+					   cust_name VARCHAR(15) NOT NULL,
+					   status VARCHAR(20) CHECK (status IN ('ACTIVE','INACTIVE')) DEFAULT 'ACTIVE',
+					   created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+
+CREATE TABLE COMPANY(company_id INT IDENTITY(1,1) PRIMARY KEY,
+					 comp_name VARCHAR(20) NOT NULL,
+					 status VARCHAR(10) CHECK (status IN('ACTIVE','INACTIVE')) DEFAULT 'ACTIVE');
+
+CREATE TABLE BRANCHES(b_id INT PRIMARY KEY,
+					  b_name VARCHAR(20),
+					  company_id INT FOREIGN KEY REFERENCES COMPANY(company_id));
+DROP TABLE BRANCHES;
+
+CREATE TABLE CATEGORY(cat_id INT PRIMARY KEY, cat_name VARCHAR(20) UNIQUE);
+
+ALTER TABLE CUSTOMERS ADD company_id INT FOREIGN KEY REFERENCES COMPANY(company_id);
+
+ALTER TABLE CUSTOMERS ADD b_id INT FOREIGN KEY REFERENCES BRANCHES(b_id);
+ALTER TABLE CUSTOMERS DROP b_id;
+
+ALTER TABLE CUSTOMERS ADD cat_id INT FOREIGN KEY REFERENCES CATEGORY(cat_id);
+
+CREATE TABLE ADDRESS(a_id INT PRIMARY KEY NOT NULL,
+                     cust_id INT FOREIGN KEY REFERENCES CUSTOMERS(cust_id),
+					 a_type VARCHAR(20) CHECK( a_type IN('BILLING','PICKING','DELIVERY')),
+					 a_line VARCHAR(200),
+					 city VARCHAR(10));
+
+CREATE TABLE CERDIT_DETAILS(cd_id INT PRIMARY KEY,
+                            cust_id INT FOREIGN KEY REFERENCES CUSTOMERS(cust_id),
+							limit DECIMAL(10,2),
+							from_date DATE ,
+							to_date  DATE);
+
+CREATE TABLE DOCUMENTS(d_id INT PRIMARY KEY,
+                       cust_id INT FOREIGN KEY REFERENCES CUSTOMERS(cust_id),
+					   doc_type VARCHAR(20),
+					   exp_date DATE,
+					   file_path VARCHAR(200));
+
+CREATE TABLE SHIPMENTS(s_id INT PRIMARY KEY,
+                       cust_id INT FOREIGN KEY REFERENCES CUSTOMERS(cust_id),
+					   ship_status VARCHAR(10) CHECK(ship_status IN ('ACTIVE','COMPLETED','CANCELLED')));
+
+cREATE TABLE CLAIMS(claim_id INT PRIMARY KEY,
+                    cust_id INT FOREIGN KEY REFERENCES CUSTOMERS(cust_id),
+					claim_status VARCHAR(10) CHECK(claim_status IN ('OPEN','CLOSE')));
+
+CREATE TABLE INVOICES(invoice_id INT PRIMARY KEY,
+                      cust_id INT FOREIGN KEY REFERENCES CUSTOMERS(cust_id),
+					  amount BIGINT,
+					  invoice_status VARCHAR(15) CHECK(invoice_status IN('PAID','UNPAID')));
+
+INSERT INTO COMPANY (comp_name,status) VALUES ('ABC Logistics','ACTIVE'),
+                                              ('Global Trade','ACTIVE'),
+                                              ('Fast Cargo','ACTIVE'),
+                                              ('Blue Sky Pvt','ACTIVE'),
+                                              ('Nova Shipping','ACTIVE'),
+                                              ('Prime Movers','ACTIVE'),
+                                              ('Elite Transport','ACTIVE'),
+                                              ('Urban Cargo','ACTIVE'),
+                                              ('Skyline Freight','ACTIVE'),
+                                              ('Velocity Logistics','ACTIVE');
+
+SELECT * FROM COMPANY;
+
+INSERT INTO BRANCHES (b_id,b_name,company_id) VALUES
+(1,'Hyderabad',1),
+(2,'Bangalore',2),
+(3,'Mumbai',3),
+(4,'Delhi',4),
+(5,'Chennai',5),
+(6,'Pune',6),
+(7,'Kolkata',7);
+
+SELECT * FROM BRANCHES;
+
+INSERT INTO CATEGORY VALUES
+(1,'Retail'),
+(2,'Corporate'),
+(3,'Wholesale'),
+(4,'Enterprise'),
+(5,'Distributor');
+
+SELECT * FROM CATEGORY;
+
+INSERT INTO CUSTOMERS (cust_name,status,company_id,b_id,cat_id) VALUES
+('Hiranya','ACTIVE',1,1,1),
+('Ashmitha','ACTIVE',2,2,2),
+('Divya','ACTIVE',3,3,1),
+('Divyatej','ACTIVE',4,4,3),
+('Akki','ACTIVE',5,5,1),
+('Addy','ACTIVE',6,6,2),
+('Vibhu','ACTIVE',7,7,3),
+('Navneetha','ACTIVE',8,1,4),
+('Manu','ACTIVE',9,2,5),
+('Sharmila','ACTIVE',10,3,2),
+('Sathvik','ACTIVE',1,4,1),
+('Vivek','ACTIVE',2,5,3),
+('Ritika','ACTIVE',3,6,2),
+('Harati','ACTIVE',4,7,1),
+('Manish','ACTIVE',5,1,4),
+('Uma','ACTIVE',6,2,5),
+('Sravanthi','INACTIVE',7,3,2),
+('Jay','ACTIVE',8,4,1),
+('Rahul','ACTIVE',9,5,3),
+('Sneha','ACTIVE',10,6,2),
+('Arjun','ACTIVE',1,7,1),
+('Megha','ACTIVE',2,1,2),
+('Karthik','ACTIVE',3,2,3),
+('Lavanya','ACTIVE',4,3,4),
+('Nikhil','ACTIVE',5,4,5);
+
+INSERT INTO CUSTOMERS (cust_name,status,company_id,b_id,cat_id) VALUES
+('Hiranya','INACTIVE',1,1,1),
+('Divya','INACTIVE',3,3,1),
+('Akki','INACTIVE',5,5,1),
+('Vibhu','INACTIVE',7,7,3),
+('Navneetha','INACTIVE',8,1,4);
+
+SELECT * FROM CUSTOMERS;
+
+INSERT INTO ADDRESS VALUES
+(1,11,'BILLING','Street 1','HYD'),
+(2,10,'DELIVERY','Madhapur','HYD'),
+(3,21,'BILLING','MG Road','BLR'),
+(4,13,'DELIVERY','Andheri','MUM'),
+(5,14,'PICKING','CP Area','DEL'),
+(6,15,'BILLING','T Nagar','CHE'),
+(7,16,'DELIVERY','KP Road','PUN'),
+(8,17,'BILLING','Salt Lake','KOL'),
+(9,18,'DELIVERY','Gachibowli','HYD'),
+(10,19,'BILLING','Indiranagar','BLR');
+
+SELECT * FROM ADDRESS;
+
+INSERT INTO CREDIT_DETAILS VALUES
+(1,11,50000,'2024-01-01','2024-12-31'),
+(2,11,80000,'2025-01-01','2025-12-31'),
+(3,12,60000,'2024-01-01','2025-01-01'),
+(4,13,45000,'2024-06-01','2025-06-01'),
+(5,14,70000,'2024-01-01','2024-12-31'),
+(6,15,65000,'2024-01-01','2024-12-31'),
+(7,16,50000,'2024-01-01','2024-12-31'),
+(8,17,90000,'2024-01-01','2024-12-31'),
+(9,18,30000,'2024-01-01','2024-12-31'),
+(10,19,45000,'2024-01-01','2024-12-31');
+
+SELECT * FROM CREDIT_DETAILS;
+
+INSERT INTO DOCUMENTS VALUES
+(1,11,'GST','2027-12-31','/docs/gst1.pdf'),
+(2,12,'PAN','2025-05-01','/docs/pan2.pdf'),
+(3,13,'LICENSE','2024-01-10','/docs/lic3.pdf'),
+(4,14,'GST','2023-12-31','/docs/gst4.pdf'),
+(5,15,'PAN','2026-06-01','/docs/pan5.pdf'),
+(6,16,'LICENSE','2025-09-01','/docs/lic6.pdf'),
+(7,17,'GST','2024-11-11','/docs/gst7.pdf'),
+(8,18,'PAN','2026-02-14','/docs/pan8.pdf');
+
+SELECT * FROM DOCUMENTS;
+
+INSERT INTO SHIPMENTS VALUES
+(1,11,'ACTIVE'),
+(2,12,'COMPLETED'),
+(3,13,'ACTIVE'),
+(4,14,'CANCELLED'),
+(5,15,'ACTIVE'),
+(6,16,'COMPLETED'),
+(7,17,'ACTIVE'),
+(8,18,'ACTIVE'),
+(9,19,'COMPLETED'),
+(10,10,'ACTIVE');
+
+SELECT * FROM SHIPMENTS;
+
+INSERT INTO CLAIMS VALUES
+(1,11,'OPEN'),
+(2,13,'OPEN'),
+(3,15,'CLOSE'),
+(4,17,'OPEN'),
+(5,9,'CLOSE');
+
+SELECT * FROM CLAIMS;
+
+INSERT INTO INVOICES VALUES
+(1,11,25000,'UNPAID'),
+(2,12,18000,'PAID'),
+(3,13,22000,'UNPAID'),
+(4,14,15000,'PAID'),
+(5,15,30000,'UNPAID'),
+(6,16,27000,'PAID'),
+(7,17,19000,'UNPAID'),
+(8,18,21000,'PAID'),
+(9,17,25000,'UNPAID'),
+(10,10,16000,'PAID');
+
+INSERT INTO INVOICES VALUES
+(21,31,25000,'UNPAID'),
+(22,32,18000,'PAID'),
+(23,33,22000,'UNPAID'),
+(24,34,15000,'PAID'),
+(25,35,30000,'UNPAID');
+
+SELECT * FROM INVOICES;
+
+SELECT c.cust_id,c.cust_name,COUNT(DISTINCT s.s_id) as Total_Shipments,SUM(i.amount) AS Total_Invoice_Amount FROM CUSTOMERS c
+LEFT JOIN SHIPMENTS s ON c.cust_id=s.cust_id 
+LEFT JOIN INVOICES i ON c.cust_id=i.cust_id GROUP BY c.cust_id,c.cust_name;
+
+SELECT c.cust_id,c.cust_name,b.b_name,co.comp_name FROM CUSTOMERS C
+LEFT JOIN BRANCHES b ON c.b_id=b.b_id
+LEFT JOIN COMPANY co ON b.company_id=co.company_id
+GROUP BY c.cust_id,c.cust_name,b.b_name,co.comp_name;
+
+SELECT c.cust_name, d.d_id,d.doc_type,d.exp_date AS expired_date FROM CUSTOMERS c
+LEFT JOIN DOCUMENTS d ON c.cust_id=d.cust_id WHERE d.exp_date<GETDATE();
+
+SELECT c.cust_id,c.cust_name AS InActive_customers,c.status,i.invoice_status AS invoice_payment_status FROM CUSTOMERS c 
+LEFT JOIN INVOICES i ON c.cust_id=i.cust_id WHERE c.status LIKE 'INACTIVE' AND i.invoice_status LIKE 'UNPAID' ;
+
+SELECT c.cust_name,s.ship_status AS active_shipments, COUNT(cl.claim_status) AS open_claims FROM CUSTOMERS c
+LEFT JOIN SHIPMENTS s ON c.cust_id=s.cust_id
+LEFT JOIN CLAIMS cl ON c.cust_id=cl.cust_id WHERE s.ship_status LIKE 'ACTIVE' AND cl.claim_status LIKE 'OPEN' GROUP BY c.cust_id,c.cust_name,s.ship_status,cl.claim_status ;
