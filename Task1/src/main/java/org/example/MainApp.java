@@ -9,9 +9,9 @@ public class MainApp {
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
-//        UserService service = context.getBean(UserService.class);
-//
-//        service.processUser();
+        UserService service = context.getBean(UserService.class);
+
+        service.processUser();
 //        Could not initialize class org.springframework.beans.factory.BeanCreationException
         context.close();
     }
